@@ -21,10 +21,10 @@
      host   NMTOKEN #REQUIRED
      port   NMTOKEN #REQUIRED
      weight NMTOKEN "1"
-     type (ssl | tcp | udp | erlang | ssl6 | tcp6 | udp6 |bosh | bosh_ssl | websocket | websocket_ssl ) #REQUIRED>
+     type (ssl | tcp | udp | erlang | ssl6 | tcp6 | udp6 |bosh | bosh_ssl | websocket) #REQUIRED>
 
 <!ELEMENT clients (client+)>
-<!ELEMENT client (ip*| iprange) >
+<!ELEMENT client (ip*) >
 <!ATTLIST client
      cpu      NMTOKEN "1"
      type     (machine | batch)  "machine"
@@ -39,11 +39,6 @@
 <!ATTLIST ip
           value NMTOKEN #REQUIRED
           scan (true| false)  "false"
->
-<!ELEMENT iprange EMPTY>
-<!ATTLIST iprange
-          value NMTOKEN #REQUIRED
-          version NMTOKEN  "v4"
 >
 
 <!ELEMENT monitoring ( monitor+ )>
@@ -87,7 +82,6 @@
 <!ATTLIST arrivalphase
      duration NMTOKEN #REQUIRED
      phase    NMTOKEN #REQUIRED
-     wait_all_sessions_end NMTOKEN "false"
      unit     (hour | minute | second | millisecond) #REQUIRED>
 
 <!ELEMENT users EMPTY>
@@ -158,8 +152,8 @@ repeat | if | change_type | foreach | set_option | interaction )*>
 <!ELEMENT change_type EMPTY>
 <!ATTLIST change_type
      new_type         (ts_jabber | ts_http | ts_raw | ts_pgsql | ts_ldap | ts_webdav | ts_mysql | ts_fs | ts_shell | ts_job | ts_websocket | ts_amqp | ts_mqtt) #REQUIRED
-     host CDATA #REQUIRED
-     port CDATA #REQUIRED
+     host NMTOKEN #REQUIRED
+     port NMTOKEN #REQUIRED
      server_type NMTOKEN #REQUIRED
      store  ( true | false ) "false"
      restore ( true | false ) "false"
@@ -375,7 +369,6 @@ repeat | if | change_type | foreach | set_option | interaction )*>
     type (connect | message | close) #REQUIRED
     ack  (no_ack | parse) #IMPLIED
     frame (binary | text) #IMPLIED
-    subprotocols CDATA ""
     path CDATA "/" >
 
 <!ELEMENT amqp (#PCDATA) >
@@ -408,7 +401,8 @@ repeat | if | change_type | foreach | set_option | interaction )*>
     retained CDATA "false"
     timeout CDATA "1"
     username CDATA ""
-    password CDATA "">
+    password CDATA ""
+	client_id CDATA "">
 
 <!ELEMENT modification (attr*) >
 <!ATTLIST modification
