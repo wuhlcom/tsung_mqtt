@@ -264,16 +264,39 @@ parse(Element = #xmlElement{name=client, attributes=Attrs},
                           {Val, _} -> Val
                       end,
                 %% must be hostname and not ip:
-                case ts_utils:is_ip(Host) of
+                 case ts_utils:is_ip(Host) of
                     true ->
                         io:format(standard_error,"ERROR: client config: 'host' attribute must be a hostname, "++ "not an IP ! (was ~p)~n",[Host]),
                         exit({error, badhostname});
                     false ->
                         %% add a new client for each CPU
                         lists:duplicate(CPU,#client{host     = Host,
-                                                    weight   = Weight/CPU,
-                                                    maxusers = MaxUsers})
+                                                   weight   = Weight/CPU,
+                                                   maxusers = MaxUsers})
                 end
+  %% if the node()'s hostname is ip, then we will got the hostip replace the host attr
+                %%{ok, MasterHostname} = ts_utils:node_to_hostname(node()),
+                %%case {ts_utils:is_ip(MasterHostname), ts_utils:is_ip(Host), ts_utils:is_ip(HostIP)} of
+                   %% must be hostname and not ip:
+                   %% {false, true, _} ->
+                     %%   io:format(standard_error,"ERROR: client config: 'host' attribute must be a hostname, "++ "not an IP ! (was ~p)~n",[Host]),
+                     %%   exit({error, badhostname});
+                    %%{true, true, _} ->
+                        %% add a new client for each CPU
+                     %%   lists:duplicate(CPU,#client{host     = Host,
+                       %%                             weight   = Weight/CPU,
+                         %%                           maxusers = MaxUsers});
+  %%                  {true, _, true} ->
+                        %% add a new client for each CPU
+    %%                    lists:duplicate(CPU,#client{host     = HostIP,
+      %%                                              weight   = Weight/CPU,
+        %%                                            maxusers = MaxUsers});
+          %%          {_, _, _} ->
+                        %% add a new client for each CPU
+            %%            lists:duplicate(CPU,#client{host     = Host,
+              %%                                      weight   = Weight/CPU,
+                %%                                    maxusers = MaxUsers})
+              %%  end
         end,
     lists:foldl(fun parse/2,
                 Conf#config{clients = lists:append(NewClients,CList),

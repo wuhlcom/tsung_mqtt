@@ -213,6 +213,12 @@ do
            CONTROLLER=$CONTROLLER"_"$ID
            ;;
         x) EXCLUDE_TAG_LIST=$OPTARG;;
+	I) NAMETYPE="-name"
+            SERVER_IP=$OPTARG
+            if [ "$SERVER_IP" != "" ]; then
+                CONTROLLER_EXTENDS="@$SERVER_IP"
+            fi
+            ;;
         h) usage;;
         *) usage ;;
     esac
